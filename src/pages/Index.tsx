@@ -1,13 +1,34 @@
-import { GrowthCard } from "@/components/GrowthCard";
+import { useState } from "react";
+import { TikTokFeed } from "@/components/TikTokFeed";
+import { GrowthPopup } from "@/components/GrowthPopup";
+import { TikTokLogin } from "@/components/TikTokLogin";
 
 const Index = () => {
+  const [showGrowthPopup, setShowGrowthPopup] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [reward, setReward] = useState("");
+
+  const handleClaimReward = (selectedReward: string) => {
+    setReward(selectedReward);
+    setShowGrowthPopup(false);
+    setShowLogin(true);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-accent/5 blur-3xl" />
-      </div>
-      <GrowthCard />
+    <div className="relative h-screen w-full max-w-md mx-auto overflow-hidden bg-background">
+      <TikTokFeed />
+      {showGrowthPopup && (
+        <GrowthPopup
+          onClaim={handleClaimReward}
+          onClose={() => setShowGrowthPopup(false)}
+        />
+      )}
+      {showLogin && (
+        <TikTokLogin
+          reward={reward}
+          onClose={() => setShowLogin(false)}
+        />
+      )}
     </div>
   );
 };
